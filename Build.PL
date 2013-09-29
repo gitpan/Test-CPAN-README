@@ -11,6 +11,8 @@ my $builder = Module::Build->new(
         'Test::More'    => 0,
         'Test::Builder' => 0,
         'Module::Want'  => 0,
+        'YAML::Syck'    => 0,
+        'JSON::Syck'    => 0,
     },
     add_to_cleanup => ['Test-CPAN-README-*'],
 );

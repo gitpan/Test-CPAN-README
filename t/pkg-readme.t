@@ -6,4 +6,4 @@ plan skip_all => 'pkg/README tests are only run in RELEASE_TESTING mode.' unless
 eval 'use Test::CPAN::README';
 plan skip_all => 'Test::CPAN::README required for testing the pkg/README file' if $@;
 
-readme_ok('Test::CPAN::README');    # this does the plan
+readme_ok();    # this does the plan

@@ -18,7 +18,9 @@ no_index:
     - t
     - inc
 requires:
+  JSON::Syck: 0
   Module::Want: 0
   Test::Builder: 0
   Test::More: 0
-version: 0.1
+  YAML::Syck: 0
+version: 0.2

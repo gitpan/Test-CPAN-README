@@ -12,6 +12,8 @@ WriteMakefile(
         'Test::More'    => 0,
         'Test::Builder' => 0,
         'Module::Want'  => 0,
+        'YAML::Syck'    => 0,
+        'JSON::Syck'    => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES    => 'Test-CPAN-README-*' },

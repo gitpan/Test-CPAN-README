@@ -32,12 +32,14 @@
       },
       "runtime" : {
          "requires" : {
+            "JSON::Syck" : "0",
             "Module::Want" : "0",
             "Test::Builder" : "0",
-            "Test::More" : "0"
+            "Test::More" : "0",
+            "YAML::Syck" : "0"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.1"
+   "version" : "0.2"
 }

@@ -4,9 +4,8 @@ use strict;
 use warnings;
 
 use Test::Builder;
-use Module::Want qw(have_mod ns2distname);
-
-$Test::CPAN::README::VERSION = '0.1';
+use Module::Want qw(have_mod ns2distname distname2ns);
+$Test::CPAN::README::VERSION = '0.2';
 
 my $Test = Test::Builder->new;
 
@@ -24,8 +23,29 @@ sub import {
 sub readme_ok {
     my ($ns) = @_;
 
+    if ( !$ns ) {
+        if ( -e "META.json" ) {
+            require JSON::Syck;
+            $ns = JSON::Syck::LoadFile("META.json")->{'name'};
+        }
+        elsif ( -e "META.yml" ) {
+            require YAML::Syck;
+            $ns = YAML::Syck::LoadFile("META.yml")->{'name'};
+        }
+        elsif ( -e "META.yaml" ) {
+            require YAML::Syck;
+            $ns = YAML::Syck::LoadFile("META.yaml")->{'name'};
+        }
+        else {
+            $Test->ok( 0, 'readme_ok() could not find META' );
+            return;
+        }
+
+        $ns = distname2ns($ns);
+    }
+
     if ( !have_mod($ns) ) {
-        $Test->ok( 0, 'readme_ok() could not load given NS' );
+        $Test->ok( 0, 'readme_ok() could not load NS' );
         return;
     }
 
@@ -48,14 +68,15 @@ sub readme_ok {
 
 __END__
 
+=encoding utf8
+
 =head1 NAME
 
 Test::CPAN::README -  Validation of the README file in a CPAN distribution
 
-
 =head1 VERSION
 
-This document describes Test::CPAN::README version 0.1
+This document describes Test::CPAN::README version 0.2
 
 =head1 SYNOPSIS
 
@@ -67,19 +88,25 @@ This document describes Test::CPAN::README version 0.1
     eval 'use Test::CPAN::README';
     plan skip_all => 'Test::CPAN::README required for testing the pkg/README file' if $@;
 
+    readme_ok();    # this does the plan
+    
+or specify the NS instead of getting it from META info:
+
     readme_ok('Foo::Bar::Baz');    # this does the plan
 
 =head1 DESCRIPTION
 
-Validate that README file has the right headeing/version line.
+Validate that README file has the right heading/version line.
 
 =head1 INTERFACE 
 
 has one exported function: readme_ok
 
-=head2 readme_ok(<NS>)
+=head2 readme_ok([NS])
 
-Takes the NS that belongs to the main distro’s README file and makes sure it contains the correct heading, namely: '<DIST> version <VERISON>\n'
+Tests that the README file contains the correct heading, namely: '<DIST> version <VERSION>\n'
+
+The DIST is determined from META info. You can pass in an alternate name space to use instead.
 
 =head1 DIAGNOSTICS
 
